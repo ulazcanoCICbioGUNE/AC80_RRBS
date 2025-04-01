@@ -44,6 +44,7 @@ project_name <- "AC80_RRBS"
 # Pathway to the folders and files
 # Select one option depending if you are running the script in Rocky or local
 path <- "/vols/GPArkaitz_bigdata/ulazcano/"
+files_rocky <- "W:/DATA_shared/"
 
 # Date of the log file 0_Sample_info_XXX.txt
 logdate <- "20250401"
@@ -57,10 +58,10 @@ memory <- c("3")
 
 
 # Load log file 
-#logfile <- read.table(paste(path, project_name, "/log/0_Sample_info_", logdate, ".log", sep = ""), header = TRUE)
+logfile <- read.table(paste(path, project_name, "/log/0_Sample_info_", logdate, ".log", sep = ""), header = TRUE)
 
 # Input directory 
-dir_infiles <- "/vols/GPArkaitz_bigdata/DATA_shared/AC-80_RRBS_Test/FASTQs"
+dir_infiles <- paste(files_rocky,"/AC-80_RRBS/TEST_Vazyme_EMvsBS/FASTQs")
 
 # Create output directory
 dir_outfiles <- paste(path, project_name, sep = "")

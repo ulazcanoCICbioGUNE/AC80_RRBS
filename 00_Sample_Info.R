@@ -15,7 +15,6 @@
 # 
 # This file must be MANUALLY adjusted for the different projects. 
 
-#######CAMBIAR SEGÚN YO LO HAGA, HABRÁ UNA VERSIÓN PARA SRA Y OTRA PARA CUANDO ME MANDE ANA LOS DATOS ######
 # Content
 #   - Named Sample_info.csv
 #   - Must have at least, the following variables:
@@ -35,37 +34,38 @@
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Project name
-project <- "AC80"
+project <- "AC80_RRBS"
 
 
 # Pathway to the folders and files
+#Personal path in bigdata
+path <- "W:/ulazcano/"
+
 # Select one option depending if you are running the script in Rocky or local
-files_rocky <- "/vols/GPArkaitz_bigdata/ulazcano/AC80/"
-path <- "W:/ulazcano/AC80/"
+files_rocky <- "W:/DATA_shared/"
 
 # Local directory with Git folders 
-local_dir <- "C:/Users/ulazcano/CIC bioGUNE/Arkaitz group - Documentos/Individual folders/Uxue Lazkano/PhD/3.Projects/AC80_RRBS_Test/"
+local_dir <- "C:/Users/ulazcano/CIC bioGUNE/Arkaitz group - Documentos/Individual folders/Uxue Lazkano/PhD/3.Projects/AC80_RRBS/"
 
 
 # Input directory
 # Must be the folder where the library preparation pdf is found and folder 
 # with the fastq are included 
-files <- "W:/DATA_shared/AC-80_RRBS_Test/"
-#files <- paste(path,project,"_fastqs","/FASTQ/",sep="" )
+files <- paste(files_rocky,"/AC-80_RRBS/TEST_Vazyme_EMvsBS/",sep="" )
 # Select input directory
 dir_in <- files
 
 # First and last sample found in the Library Preparation pdf table which is 
 # usually in page 5, corresponding to the firs column which can be Library ID or GAP ID
 # This is a key step to generate a data frame based on the table from the pdf
-first_sample <- "AC-80_23"
-last_sample <- "AC-80_32"
+first_sample <- "AC-80_L07"
+last_sample <- "AC-80_L24"
 
 # Condition
 trt <- "Enzyme"
 
 # Contrast level order 
-lvl_order <- c("TaqaI", "HaeIII")
+lvl_order <- c("MspI+MspI","MspI+TaqaI", "MspI+HaeIII")
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -76,8 +76,7 @@ lvl_order <- c("TaqaI", "HaeIII")
 ## Create folders BigData folders
 # Create project folder in BigData
 #dir.create(file.path(path, project))
-#dir_out <- paste(path, project, sep = "")
-dir_out <- "W:/ulazcano/AC80-prueba/"
+dir_out <- paste(path, project, sep = "")
 setwd(dir_out)
 
 # Create log file folder
@@ -89,9 +88,9 @@ dir_log <- paste(dir_out, "/log", sep = "")
 #                     LOAD LIBRARIES AND FUNCTIONS                           
 ################################################################################
 # Load libraries
-source(paste(local_dir, "Scripts", "/libraries_RREMseq.R", sep = ""))
+source(paste(local_dir, "Functions", "/libraries_RREMseq.R", sep = ""))
 # Load functions 
-source(paste(local_dir, "Scripts", "/function_pdf_to_tab.R", sep = ""))
+source(paste(local_dir, "Functions", "/function_pdf_to_tab.R", sep = ""))
 
 ################################################################################
 #                         SAMPLE INFORMATION FILE
@@ -100,7 +99,7 @@ source(paste(local_dir, "Scripts", "/function_pdf_to_tab.R", sep = ""))
 #I'm going to manually add the information of the samples
 
 # List of samples names
-samples <- unique(gsub("_1.fastq.gz","", list.files(path = paste(dir_in, "FASTQs/", sep=""), pattern = "_1.fastq.gz")))
+samples <- unique(gsub("_R1.fastq.gz","", list.files(path = paste(dir_in, "FASTQs/", sep=""), pattern = "_R1.fastq.gz")))
 
 
 # PDF file with the library preparation report
@@ -115,12 +114,16 @@ file <- pdf_text(paste(dir_in, list.files(path = dir_in, pattern = "Library_Prep
 #This need to be corrected in following project but for the moment I manually crate the table
 # Run the function
 data <- pdf_to_tab(file, first_sample, last_sample)
-#print(head(data))
-# Create the enzyme column
-enzyme <- c(rep("TaqaI", 3), rep("HaeIII", 3))
 
-# Combine into a data frame
-data <- data.frame(Sample = samples, Enzyme = enzyme)
+#Modify line 5 and 14 and assign conversion method to all the table
+# Modify lines 5 and 14 by removing 'Bisulfite' and 'Enzymatic'
+data$V8 <- gsub(" Bisulfite", "", data$V8)
+data$V8 <- gsub(" Enzymatic", "", data$V8)
+
+# Create new column 'Conversion_type'
+data<- data %>%
+  mutate(Conversion_type = ifelse(row_number() <= 9, "Bisulfite", "Enzymatic"))
+
 
 # Number of samples
 n <- length(samples)
@@ -128,9 +131,23 @@ n <- length(samples)
 # Verification
 ifelse(nrow(data) == n, print("The number of samples from the data table in the pdf match the samples in the folder"), paste("ERROR: Samples do not match", "CHANGE THE NUMBER OF ROWS REMOVED IN THE FUNCTION", sep = "\n."))
 
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Select manually the columns because theorder is not the same in all the pdfs
+# Usually select 
+#  - Sample names compatible with the file names
+
+data <- data %>% select(V7, V8, Conversion_type) %>% arrange(desc(V7))
+colnames(data) <- c("Sample", "Enzymes", "Conversion_type")
+data$Sample <- gsub("[-_]", "", data$Sample)
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Save data as sample information 
 sample_info <- data
+
+
+
 #######################################################################
 #                             SAVE DATA                         
 #######################################################################
