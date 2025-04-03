@@ -71,8 +71,8 @@ logdate <- "20250401"
 
 ### Process information ###
 partition <- "FAST"
-time <- c("04:00:00")
-memory <- c("10")
+time <- c("06:00:00")
+memory <- c("150")
 cpu <- 4
 
 

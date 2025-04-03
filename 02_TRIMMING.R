@@ -71,7 +71,7 @@ logdate <- "20250401"
 
 ### Process information ###
 partition <- "FAST"
-time <- c("02:30:00")
+time <- c("04:00:00")
 memory <- c("1")
 cpu <- 4
 
@@ -124,7 +124,7 @@ samples_names <- unique(gsub("_.*", "", samples_names))
 
 
 ### Generate PBS ###
-for (i in 1:length(samples)) {
+for (i in 1:length(samples_names)) {
 #for (i in 1:1) {
   # Job name
   job_name <- paste(samples_names[i],"_Trimmed",sep='');

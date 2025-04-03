@@ -27,6 +27,8 @@ project_name <- "AC80_RRBS"
 
 # File path
 path <- "/fastdata/GPArkaitz_fastdata/ulazcano/"
+#path <- "/vols/GPArkaitz_bigdata/ulazcano/"
+
 # -----------------------------------------------------------------------------------------------------------------
 
 # Output and input directories SSH 
@@ -37,8 +39,8 @@ setwd(input_dir)
 samples <- list.files(pattern = ".fq.gz")
 # Filter sample name 
 #samples_names <- gsub("_val_.*", "", samples)
-samples_names <- unique(sub("^(S_\\d+)_.*", "\\1", samples))
-
+#samples_names <- unique(sub("^(S_\\d+)_.*", "\\1", samples))
+samples_names <- unique(gsub("_R[12].*", "", samples))
 
 # Define patterns (escaping special characters)
 pattern <- c(
