@@ -105,7 +105,7 @@ dir_infiles <- paste(files_rocky,"AC-80_RRBS/TEST_Vazyme_EMvsBS/FASTQs", sep="")
 
 # Create output directory
 dir.create(file.path(dir_out,"02_TRIMMED"))
-dir_outfiles <- paste(dir_out,"/02_TRIMMED",sep='')
+dir_outfiles <- paste(dir_out,"/02_TRIMMED/try2/",sep='')
 setwd(dir_outfiles)
 
 
