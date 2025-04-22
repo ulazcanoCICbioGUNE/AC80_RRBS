@@ -52,7 +52,7 @@ logfile <- read.table(paste(log_folder, "/0_Sample_info_", logdate, ".log", sep 
 
 ### Process information ###
 partition <- "NORMAL"
-time <- c("20:00:00")
+time <- c("24:00:00")
 memory <- c("14")
 node <- 1
 cpu <- 10
@@ -63,23 +63,11 @@ ram <- as.numeric(memory)*10^9
 # Load log file 
 #logfile <- read.table(paste(path, project_name, "/log/0_Sample_info_", logdate, ".log", sep = ""), header = TRUE)
 
-# Specie
-specie <- "Human"
 
-# Input directories
-if(trmd == TRUE){
-  # Input directory
-  dir_infiles <- paste(path, project, "/02_TRIMMED", sep = "" )
-  pattern = "_1_val_1.fq.gz"
-  pattern2 = "_2_val_2.fq.gz"
-}else{
-  # Load log file 
-  logfile <- read.table(paste(path, project, "/0_Sample_info_", logdate, ".log", sep = ""), header = TRUE)
-  # Input directory
-  dir_infiles <- paste(logfile$filedirRocky, "/FASTQs", sep = "")
-  pattern = "_1_val_1.fq.gz"
-  pattern2 = "_2_val_2.fq.gz"
-}
+dir_infiles <- paste(path, project, "/02_TRIMMED", sep = "" )
+pattern = "_R1_val_1.fq.gz"
+pattern2 = "_R2_val_2.fq.gz"
+
 
 
 # Create output directory
@@ -127,6 +115,7 @@ for (i in 1:length(samples_names)) {
     paste("#SBATCH --job-name=",job_name,sep=''),
     paste("#SBATCH --partition=",partition,sep=''),
     c("#SBATCH --ntasks=1"),
+    c("#SBATCH --exclude=gn[00,01,02]"),
     paste("#SBATCH --nodes=", node,sep =''), 
     paste("#SBATCH --cpus-per-task=",cpu, sep=''),
     paste("#SBATCH --time=",time,sep=''),
@@ -134,7 +123,7 @@ for (i in 1:length(samples_names)) {
     paste("#SBATCH -o ",job_name,".out",sep=''),
     paste("#SBATCH -e ",job_name,".err",sep=''),
     c("source /opt/ohpc/pub/apps/anaconda3/cic-env"),
-    c("conda activate /vols/GPArkaitz_bigdata/ulazcano/envs/iRRBS_prueba"),
+    c("conda activate /vols/GPArkaitz_bigdata/DATA_shared/NewCluster_Software/conda_envs/Bismark"),
     c(paste("cd ", dir_outfiles)), 
     c(command),
     file=filename,sep = "\n",append=F)
