@@ -52,8 +52,8 @@ logfile <- read.table(paste(log_folder, "/0_Sample_info_", logdate, ".log", sep 
 
 ### Process information ###
 partition <- "NORMAL"
-time <- c("24:00:00")
-memory <- c("14")
+time <- c("40:00:00")
+memory <- c("18")
 node <- 1
 cpu <- 10
 ram <- as.numeric(memory)*10^9

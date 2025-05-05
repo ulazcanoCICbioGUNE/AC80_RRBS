@@ -97,7 +97,7 @@ cpu <- 4
 dir_out <- paste(path, project, sep = "")
 
 # Load log file 
-logfile <- read.table(paste(log_folder, "/log/0_Sample_info_", logdate, ".log", sep = ""), header = TRUE)
+logfile <- read.table(paste(log_folder, "/0_Sample_info_", logdate, ".log", sep = ""), header = TRUE)
 
 # Input directory
 #dir_infiles <- paste(logfile$filedirRocky, "FASTQs", sep = "")
@@ -141,7 +141,7 @@ for (i in 1:length(samples_names)) {
   # Cutadapt command
   #The Illimuna universal adapter AGATCGGAAGAGCACACGTCTGAACTCCAGTCACGCCTATCAATCTCGTA
   # and all the overepresented seuqences in the 01 FATSQC
-  command <- paste("trim_galore --illumina  --paired", input1, input2, "-o", dir_outfiles, sep= " ")
+  command <- paste("trim_galore --illumina  --clip_R2 12 --three_prime_clip_R1 12 --paired", input1, input2, "-o", dir_outfiles, sep= " ")
   
   # SBATCH File
   filename <- paste(job_name,".sh",sep='');
