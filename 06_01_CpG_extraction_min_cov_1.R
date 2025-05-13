@@ -599,5 +599,4 @@ rm(mspIhaeIII_enzym_df)
 mspIhaeIII_enzym_CpGs_gr <- as(mspIhaeIII_enzym_CpGs,"GRanges")
 seqlevelsStyle(mspIhaeIII_enzym_CpGs_gr) = "UCSC"  # necessary
 
-save.image(file = "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/AC80_RRBS.RData")
-load("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/AC80_RRBS.RData")
+save.image(file = "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/CpGs_cov1.RData")
