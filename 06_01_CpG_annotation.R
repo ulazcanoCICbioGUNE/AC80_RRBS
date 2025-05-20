@@ -32,7 +32,7 @@ library(readxl)
 # Get the reference genome
 genome <- BSgenome.Hsapiens.UCSC.hg38
 
-# Find all CpG sites
+# Find all CpG sites in genome
 findCpG <- function(seqname) {
   seq <- genome[[seqname]]  # Get the sequence for a given chromosome
   cpgs <- matchPattern("CG", seq)  # Find "CG" motifs

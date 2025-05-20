@@ -9,7 +9,7 @@
 
 #R in lamarr
 R
-.libPaths("/home/CICBIOGUNE/ulazcano/R_lamarr/epigenomics")
+.libPaths("/vols/GPArkaitz_bigdata/DATA_shared/Rocky_R/epigenomics_Rocky")
 
 
 ##################
@@ -26,20 +26,20 @@ library(GenomicFeatures)
 library(ChIPseeker)
 library(data.table)
 
-setwd("W:/ulazcano/AC80_RRBS/05_Methylation_extraction/")
-dir_infiles <- "W:/ulazcano/AC80_RRBS/05_Methylation_extraction/"
+setwd("W:/ulazcano/AC80_RRBS/05_Methylation_extraction/cov2cyt/")
+dir_infiles <- "W:/ulazcano/AC80_RRBS/05_Methylation_extraction/cov2cyt/"
 
-setwd("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/05_Methylation_extraction")
-dir_infiles <- "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/05_Methylation_extraction/"
+setwd("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/05_Methylation_extraction/cov2cyt/")
+dir_infiles <- "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/05_Methylation_extraction/cov2cyt/"
 
 
 #Read coverage files (containing cytosines only from my samples)
 #List all files TIENE QUE ESTAR TODO AS LIST
-file_list<-list.files(path=dir_infiles, pattern = "*_bismark_bt2_pe.bismark.cov.gz", all.files=FALSE,
+file_list<-list.files(path=dir_infiles, pattern = ".CpG_report.merged_CpG_evidence.cov", all.files=FALSE,
                       full.names=FALSE)
 path_list <- as.list(paste0(dir_infiles,'/', unlist(file_list)))
 
-sample_name <- strsplit(file_list, "_R1_val_1_bismark_bt2_pe.bismark.cov.gz")
+sample_name <- strsplit(file_list, ".CpG_report.merged_CpG_evidence.cov")
 
 ##########################################
 # Load data (.cov) from MspI + BS [S01,S04,S07]
@@ -57,9 +57,10 @@ mspI_BS_BismarkCoverage<- methRead(mspI_BS_paths, sample.id = mspI_BS_sample_nam
 
 mspI_BS_BismarkCoverage_meth<- methylKit::unite(mspI_BS_BismarkCoverage)
 mspI_BS_df <- as.data.frame(mspI_BS_BismarkCoverage_meth)
+
 mspI_BS_CpGs <- mspI_BS_df[mspI_BS_df$chr%in%c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"), ]
 dim(mspI_BS_CpGs)
-# 9203822      13
+# 7780133      13
 rm(mspI_BS_BismarkCoverage_meth)
 rm(mspI_BS_BismarkCoverage)
 rm(mspI_BS_df)
@@ -85,7 +86,7 @@ mspItaqaI_BS_BismarkCoverage_meth<- methylKit::unite(mspItaqaI_BS_BismarkCoverag
 mspItaqaI_BS_df <- as.data.frame(mspItaqaI_BS_BismarkCoverage_meth)
 mspItaqaI_BS_CpGs <- mspItaqaI_BS_df[mspItaqaI_BS_df$chr%in%c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"), ]
 dim(mspItaqaI_BS_CpGs)
-# 9580989      13
+# 8519467      13
 rm(mspItaqaI_BS_BismarkCoverage_meth)
 rm(mspItaqaI_BS_BismarkCoverage)
 rm(mspItaqaI_BS_df)
@@ -111,7 +112,7 @@ mspIhaeIII_BS_BismarkCoverage_meth<- methylKit::unite(mspIhaeIII_BS_BismarkCover
 mspIhaeIII_BS_df <- as.data.frame(mspIhaeIII_BS_BismarkCoverage_meth)
 mspIhaeIII_BS_CpGs <- mspIhaeIII_BS_df[mspIhaeIII_BS_df$chr%in%c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"), ]
 dim(mspIhaeIII_BS_CpGs)
-# 13341644       13
+# 10719257       13
 
 rm(mspIhaeIII_BS_BismarkCoverage_meth)
 rm(mspIhaeIII_BS_BismarkCoverage)
@@ -139,7 +140,7 @@ mspI_enzym_BismarkCoverage_meth<- methylKit::unite(mspI_enzym_BismarkCoverage)
 mspI_enzym_df <- as.data.frame(mspI_enzym_BismarkCoverage_meth)
 mspI_enzym_CpGs <- mspI_enzym_df[mspI_enzym_df$chr%in%c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"), ]
 dim(mspI_enzym_CpGs)
-# 12270483       13
+# 9532433       13
 rm(mspI_enzym_BismarkCoverage_meth)
 rm(mspI_enzym_BismarkCoverage)
 rm(mspI_enzym_df)
@@ -166,7 +167,7 @@ mspItaqaI_enzym_BismarkCoverage_meth<- methylKit::unite(mspItaqaI_enzym_BismarkC
 mspItaqaI_enzym_df <- as.data.frame(mspItaqaI_enzym_BismarkCoverage_meth)
 mspItaqaI_enzym_CpGs <- mspItaqaI_enzym_df[mspItaqaI_enzym_df$chr%in%c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"), ]
 dim(mspItaqaI_enzym_CpGs)
-# 14491039       13
+# 11368958       13
 rm(mspItaqaI_enzym_BismarkCoverage_meth)
 rm(mspItaqaI_enzym_BismarkCoverage)
 rm(mspItaqaI_enzym_df)
@@ -192,7 +193,7 @@ mspIhaeIII_enzym_BismarkCoverage_meth<- methylKit::unite(mspIhaeIII_enzym_Bismar
 mspIhaeIII_enzym_df <- as.data.frame(mspIhaeIII_enzym_BismarkCoverage_meth)
 mspIhaeIII_enzym_CpGs <- mspIhaeIII_enzym_df[mspIhaeIII_enzym_df$chr%in%c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"), ]
 dim(mspIhaeIII_enzym_CpGs)
-# 18251289       13
+# 11900623       13
 rm(mspIhaeIII_enzym_BismarkCoverage_meth)
 rm(mspIhaeIII_enzym_BismarkCoverage)
 rm(mspIhaeIII_enzym_df)

@@ -91,7 +91,7 @@ samples_names <- gsub(pattern,"", samples)
 for (i in 1:length(samples_names)) {
 #for (i in 1:1) {
   # Job name
-  job_name <- paste("cov2cyt_",samples_names[i],"_BISMARK_methylation_extractor",sep='');
+  job_name <- paste(samples_names[i],"_cov2cyt","_BISMARK_methylation_extractor",sep='');
   
   # Input files
   input1 <- paste(samples_names[i], pattern, sep="")
@@ -100,7 +100,7 @@ for (i in 1:length(samples_names)) {
   output <- paste(dir_outfiles, "/", job_name, "/", sep="")
 
   # Command
-  command <- paste("coverage2cytosine --genome_folder ",indexfolder,  " -o ", dir_outfiles, "/cov2cyt/",samples_names[i], " ", samples_names[i],"_R1_val_1_bismark_bt2_pe.bismark.cov.gz", sep="")
+  command <- paste("coverage2cytosine --genome_folder ",indexfolder,  " --merge_CpG -o ", dir_outfiles, "/cov2cyt/",samples_names[i], " ", samples_names[i],"_R1_val_1_bismark_bt2_pe.bismark.cov.gz", sep="")
 
   
   # SBATCH File
