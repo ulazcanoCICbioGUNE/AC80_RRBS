@@ -82,9 +82,20 @@ for (i in 1:18) {
 save.image(file = "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov1_3529935.RData")
 load("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov1_3529935.RData")
 #load("W:/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov1_3529935.RData")
-CpGs <- as.data.frame(CpGs_gr)
-head(CpGs)
 
+CpGs_mincov1 <- as.data.frame(CpGs_gr)
+CpGs_mincov1$index <- paste(CpGs_mincov1$seqnames,CpGs_mincov1$start, sep="_")
+
+
+load("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov10_1238930.RData")
+#load("W:/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov10_1238930.RData")
+CpGs_mincov10 <- as.data.frame(CpGs_gr)
+CpGs_mincov10$index <- paste(CpGs_mincov10$seqnames,CpGs_mincov10$start, sep="_")
+
+head(CpGs_mincov10)
+
+CpGs_mincov1_common_CpG <- CpGs_mincov1[CpGs_mincov1$index %in% CpGs_mincov10$index, ]
+head(CpGs_mincov1_common_CpG)
 #Plot of the results to see how do fractional methylation values correlate in the same CpGs between the two techniques
 
 # Separate the samples in the two grous regarding their treatment
@@ -92,8 +103,8 @@ group1_cols <- paste0("frac_methyl", 1:9)
 group2_cols <- paste0("frac_methyl", 10:18)
 
 # Extract the data matrices
-group1 <- as.matrix(CpGs[, group1_cols])
-group2 <- as.matrix(CpGs[, group2_cols])
+group1 <- as.matrix(CpGs_mincov1_common_CpG[, group1_cols])
+group2 <- as.matrix(CpGs_mincov1_common_CpG[, group2_cols])
 
 # Compute pairwise correlation: each column in group1 vs each in group2
 cor_matrix <- cor(group1, group2, use = "pairwise.complete.obs")
@@ -107,8 +118,8 @@ colnames(cor_matrix) <- c("S_22_MspI_Enzym", "S_22_TaqaI_Enzym", "S_22_HaeIII_En
 pdf("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/pairwise_correlation_common_CpGs_cov1_3529935.pdf", width = 8, height = 6)
 pheatmap(cor_matrix,
          main = "Pairwise Correlation: BS vs Enzym",
-         cluster_rows = TRUE,
-         cluster_cols = TRUE,
+         cluster_rows = F,
+         cluster_cols = F,
          display_numbers = TRUE,
          number_format = "%.2f",
          fontsize_number = 8,
@@ -116,8 +127,8 @@ pheatmap(cor_matrix,
 dev.off()
 
 # Extract methylation fraction columns for both groups
-group1 <- CpGs[, paste0("frac_methyl", 1:9)]
-group2 <- CpGs[, paste0("frac_methyl", 10:18)]
+group1 <- CpGs_mincov1_common_CpG[, paste0("frac_methyl", 1:9)]
+group2 <- CpGs_mincov1_common_CpG[, paste0("frac_methyl", 10:18)]
 
 # Calculate variance per CpG for group1 (can also do for combined if preferred)
 vars <- rowVars(as.matrix(group1))
@@ -192,15 +203,21 @@ for (i in 1:18) {
 
 save.image(file = "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov3_2242268.RData")
 load("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov3_2242268.RData")
-CpGs <- as.data.frame(CpGs_gr)
-head(CpGs)
+CpGs_mincov3 <- as.data.frame(CpGs_gr)
+CpGs_mincov3$index <- paste(CpGs_mincov3$seqnames,CpGs_mincov3$start, sep="_")
+
+
+CpGs_mincov3_common_CpG <- CpGs_mincov3[CpGs_mincov3$index %in% CpGs_mincov10$index, ]
+head(CpGs_mincov3_common_CpG)
+
+
 # Select sample columns
 group1_cols <- paste0("frac_methyl", 1:9)
 group2_cols <- paste0("frac_methyl", 10:18)
 
 # Extract the data matrices
-group1 <- as.matrix(CpGs[, group1_cols])
-group2 <- as.matrix(CpGs[, group2_cols])
+group1 <- as.matrix(CpGs_mincov3_common_CpG[, group1_cols])
+group2 <- as.matrix(CpGs_mincov3_common_CpG[, group2_cols])
 
 # Compute pairwise correlation: each column in group1 vs each in group2
 cor_matrix <- cor(group1, group2, use = "pairwise.complete.obs")
@@ -216,8 +233,8 @@ colnames(cor_matrix) <- c("S_22_MspI_Enzym", "S_22_TaqaI_Enzym", "S_22_HaeIII_En
 pdf("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/pairwise_correlation_common_CpGs_cov3_2242268.pdf", width = 8, height = 6)
 pheatmap(cor_matrix,
          main = "Pairwise Correlation: BS vs Enzym",
-         cluster_rows = TRUE,
-         cluster_cols = TRUE,
+         cluster_rows = F,
+         cluster_cols = F,
          display_numbers = TRUE,
          number_format = "%.2f",
          fontsize_number = 8,
@@ -225,8 +242,8 @@ pheatmap(cor_matrix,
 dev.off()
 
 # Extract methylation fraction columns for both groups
-group1 <- CpGs[, paste0("frac_methyl", 1:9)]
-group2 <- CpGs[, paste0("frac_methyl", 10:18)]
+group1 <- CpGs_mincov3_common_CpG[, paste0("frac_methyl", 1:9)]
+group2 <- CpGs_mincov3_common_CpG[, paste0("frac_methyl", 10:18)]
 
 # Calculate variance per CpG for group1 (can also do for combined if preferred)
 vars <- rowVars(as.matrix(group1))
@@ -302,15 +319,19 @@ for (i in 1:18) {
 
 save.image(file = "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov5_1789918.RData")
 load("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov5_1789918.RData")
-CpGs <- as.data.frame(CpGs_gr)
-head(CpGs)
+CpGs_mincov5 <- as.data.frame(CpGs_gr)
+CpGs_mincov5$index <- paste(CpGs_mincov5$seqnames,CpGs_mincov5$start, sep="_")
+
+CpGs_mincov5_common_CpG <- CpGs_mincov5[CpGs_mincov5$index %in% CpGs_mincov10$index, ]
+head(CpGs_mincov5_common_CpG)
+
 # Select sample columns
 group1_cols <- paste0("frac_methyl", 1:9)
 group2_cols <- paste0("frac_methyl", 10:18)
 
 # Extract the data matrices
-group1 <- as.matrix(CpGs[, group1_cols])
-group2 <- as.matrix(CpGs[, group2_cols])
+group1 <- as.matrix(CpGs_mincov5_common_CpG[, group1_cols])
+group2 <- as.matrix(CpGs_mincov5_common_CpG[, group2_cols])
 
 # Compute pairwise correlation: each column in group1 vs each in group2
 cor_matrix <- cor(group1, group2, use = "pairwise.complete.obs")
@@ -324,8 +345,8 @@ colnames(cor_matrix) <- c("S_22_MspI_Enzym", "S_22_TaqaI_Enzym", "S_22_HaeIII_En
 pdf("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/pairwise_correlation_common_CpGs_cov5_1789918.pdf", width = 8, height = 6)
 pheatmap(cor_matrix,
          main = "Pairwise Correlation: BS vs Enzym",
-         cluster_rows = TRUE,
-         cluster_cols = TRUE,
+         cluster_rows = F,
+         cluster_cols = F,
          display_numbers = TRUE,
          number_format = "%.2f",
          fontsize_number = 8,
@@ -333,8 +354,8 @@ pheatmap(cor_matrix,
 dev.off()
 
 # Extract methylation fraction columns for both groups
-group1 <- CpGs[, paste0("frac_methyl", 1:9)]
-group2 <- CpGs[, paste0("frac_methyl", 10:18)]
+group1 <- CpGs_mincov5_common_CpG[, paste0("frac_methyl", 1:9)]
+group2 <- CpGs_mincov5_common_CpG[, paste0("frac_methyl", 10:18)]
 
 # Calculate variance per CpG for group1 (can also do for combined if preferred)
 vars <- rowVars(as.matrix(group1))
@@ -411,7 +432,8 @@ for (i in 1:18) {
 save.image(file = "/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov10_1238930.RData")
 load("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/common_CpGs_cov10_1238930.RData")
 CpGs <- as.data.frame(CpGs_gr)
-head(CpGs)
+
+
 # Select sample columns
 group1_cols <- paste0("frac_methyl", 1:9)
 group2_cols <- paste0("frac_methyl", 10:18)
@@ -432,8 +454,8 @@ colnames(cor_matrix) <- c("S_22_MspI_Enzym", "S_22_TaqaI_Enzym", "S_22_HaeIII_En
 pdf("/vols/GPArkaitz_bigdata/ulazcano/AC80_RRBS/06_Annotation/pairwise_correlation_common_CpGs_cov10_1238930.pdf", width = 8, height = 6)
 pheatmap(cor_matrix,
          main = "Pairwise Correlation: BS vs Enzym ",
-         cluster_rows = TRUE,
-         cluster_cols = TRUE,
+         cluster_rows = F,
+         cluster_cols = F,
          display_numbers = TRUE,
          number_format = "%.2f",
          fontsize_number = 8,
